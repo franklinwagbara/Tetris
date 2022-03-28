@@ -5,4 +5,4 @@ function Cell({ value, color }) {
   return <StyledCell value={value} color={color}></StyledCell>;
 }
 
-export default Cell;
+export default React.memo(Cell);

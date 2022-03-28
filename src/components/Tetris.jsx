@@ -4,23 +4,41 @@ import useStage from "./../Hooks/useStage";
 import usePlayer from "./../Hooks/usePlayer";
 import Panel from "./Panel";
 import Container from "./styles/Container.styled";
-import { movePlayer, isCollision } from "../utils/gameHelpers";
+import { movePlayer, moveDown, isCollision } from "../utils/gameHelpers";
+import useInterval from "./../Hooks/useInterval";
+import { createStage } from "./../utils/gameHelpers";
+import { DISPLAYHEIGHT, DISPLAYWIDTH } from "./../configs";
 
 function Tetris(props) {
-  const [player, updatePlayerPosition, resetPlayer, setPlayer] = usePlayer();
+  const [dropTime, setDropTime] = useState(null);
+  const [gameOver, setGameOver] = useState(false);
+  const [player, updatePlayerPosition, rotatePlayer, resetPlayer, setPlayer] =
+    usePlayer();
   const [stage, setStage] = useStage(player, resetPlayer);
 
-  console.log("re-render");
+  const StartGame = () => {
+    setStage(createStage(DISPLAYHEIGHT, DISPLAYWIDTH));
+    setGameOver(false);
+    resetPlayer();
+  };
 
   return (
     <Container
       role="button"
       tabIndex={0}
-      onKeyDown={(e) => movePlayer(e.code, player, stage, updatePlayerPosition)}
+      onKeyDown={(e) =>
+        movePlayer(e.code, player, stage, updatePlayerPosition, rotatePlayer)
+      }
     >
       <Stage stage={stage} />
       <aside>
-        <Panel />
+        <Panel
+          gameOver={gameOver}
+          score={0}
+          rows={0}
+          level={0}
+          onStartGame={StartGame}
+        />
       </aside>
     </Container>
   );

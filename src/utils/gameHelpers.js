@@ -1,7 +1,5 @@
-import randomPiece from "./randomPiece";
-
 ///Constant declarations
-const ArrowDown = "ArrowDown";
+const ArrowUp = "ArrowUp";
 const ArrowLeft = "ArrowLeft";
 const ArrowRight = "ArrowRight";
 
@@ -73,10 +71,16 @@ export const moveDown = (player, stage, updatePlayerPosition) => {
   updatePlayerPosition(0, 0, true);
 };
 
-export const movePlayer = (code, player, stage, updatePlayerPosition) => {
+export const movePlayer = (
+  code,
+  player,
+  stage,
+  updatePlayerPosition,
+  rotatePlayer
+) => {
   switch (code) {
-    case ArrowDown:
-      moveDown(player, stage, updatePlayerPosition);
+    case ArrowUp:
+      rotatePlayer();
       break;
     case ArrowLeft:
       moveX(player, stage, -1, updatePlayerPosition);
@@ -88,6 +92,13 @@ export const movePlayer = (code, player, stage, updatePlayerPosition) => {
       break;
   }
 };
+
+/* export const swap = (A, r, l) => {
+  const tValue = temp[y][l];
+  A[y][l] = A[y][r];
+  A[y][r] = tValue;
+  return A;
+}; */
 
 export const draw = (stage, piece, { x, y }, stayOnScreen) => {
   for (let i = y; i < y + piece.length; i++) {

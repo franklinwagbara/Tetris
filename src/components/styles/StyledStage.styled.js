@@ -5,17 +5,18 @@ const StyledStage = styled.div`
   display: grid;
   grid-template-rows: repeat(
     ${(props) => props.height},
-    calc(25vw / ${(props) => props.width})
+    calc(26vw / ${(props) => props.width})
   );
   grid-template-columns: repeat(
     ${(props) => props.width},
-    calc(25vw / ${(props) => props.width})
+    calc(26vw / ${(props) => props.width})
   );
   grid-gap: 1px;
-  max-width: 27vw;
+  max-width: 28vw;
   align-items: stretch;
   justify-content: stretch;
   height: fit-content;
+  border: 2px solid gray;
 
   @media screen and (max-width: 700px) {
     grid-template-rows: repeat(
