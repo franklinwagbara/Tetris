@@ -2,7 +2,7 @@ import React from "react";
 import Pieces from "../utils/gamePieces";
 import StyledStage from "./styles/StyledStage.styled";
 import Cell from "./Cell";
-let count = 0;
+
 function Stage({ stage }) {
   const height = stage.length;
   const width = stage[0].length;

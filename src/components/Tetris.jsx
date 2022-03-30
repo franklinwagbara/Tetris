@@ -1,20 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Stage from "./Stage";
 import useStage from "./../Hooks/useStage";
 import usePlayer from "./../Hooks/usePlayer";
 import Panel from "./Panel";
 import Container from "./styles/Container.styled";
-import { movePlayer, moveDown, isCollision } from "../utils/gameHelpers";
+import { movePlayer, isCollision } from "../utils/gameHelpers";
 import useInterval from "./../Hooks/useInterval";
 import { createStage } from "./../utils/gameHelpers";
 import { DISPLAYHEIGHT, DISPLAYWIDTH } from "./../configs";
+import { useGameStatus } from "./../Hooks/useGameStatus";
 
 function Tetris(props) {
   const [dropTime, setDropTime] = useState(null);
   const [gameOver, setGameOver] = useState(false);
-  const [player, updatePlayerPosition, playerRotate, resetPlayer, setPlayer] =
-    usePlayer();
-  const [stage, setStage] = useStage(player, resetPlayer);
+  const [player, updatePlayerPosition, playerRotate, resetPlayer] = usePlayer();
+  const [stage, setStage, rowsCleared] = useStage(player, resetPlayer);
+  const [score, setScore, rows, setRows, level, setLevel] =
+    useGameStatus(rowsCleared);
 
   const StartGame = () => {
     setStage(createStage(DISPLAYHEIGHT, DISPLAYWIDTH));
@@ -22,9 +24,19 @@ function Tetris(props) {
     resetPlayer();
     setDropTime(1000);
     setGameOver(false);
+    setScore(0);
+    setRows(0);
+    setLevel(0);
   };
 
   const drop = () => {
+    //Increase the level when a row has being cleared by the player
+    if (rows > (level + 1) * 10) {
+      setLevel((prev) => prev + 1);
+
+      //Also increase the speed of the player
+      setDropTime(1000 / (level + 1) + 200);
+    }
     if (!isCollision(player, stage, { x: 0, y: 1 }))
       updatePlayerPosition(0, 1, false);
     else {
@@ -38,7 +50,7 @@ function Tetris(props) {
   };
 
   const keyUp = ({ key }) => {
-    if (key === "ArrowDown") setDropTime(1000);
+    if (key === "ArrowDown") setDropTime(1000 / (level + 1) + 200);
   };
 
   const dropPlayer = () => {
@@ -68,9 +80,9 @@ function Tetris(props) {
       <aside>
         <Panel
           gameOver={gameOver}
-          score={0}
-          rows={0}
-          level={0}
+          score={score}
+          rows={rows}
+          level={level}
           onStartGame={StartGame}
         />
       </aside>

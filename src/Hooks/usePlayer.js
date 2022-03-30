@@ -88,7 +88,7 @@ const usePlayer = () => {
     }));
   }, []);
 
-  return [player, updatePlayerPosition, playerRotate, resetPlayer, setPlayer];
+  return [player, updatePlayerPosition, playerRotate, resetPlayer];
 };
 
 export default usePlayer;

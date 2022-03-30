@@ -108,7 +108,7 @@ export const movePlayer = (
 export const draw = (stage, piece, { x, y }, stayOnScreen) => {
   for (let i = y; i < y + piece.length; i++) {
     for (let j = x; j < x + piece[0].length; j++) {
-      if (stayOnScreen && piece[i - y][j - x] != 0)
+      if (stayOnScreen && piece[i - y][j - x] !== 0)
         stage[i][j] = [piece[i - y][j - x], "merge"];
       else stage[i][j] = [piece[i - y][j - x], "clear"];
     }
