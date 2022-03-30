@@ -4,8 +4,22 @@ import { DISPLAYHEIGHT, DISPLAYWIDTH } from "./../configs";
 
 const useStage = (player, resetPlayer) => {
   const [stage, setStage] = useState(createStage(DISPLAYHEIGHT, DISPLAYWIDTH));
+  const [rowsCleared, setRowsCleared] = useState(0);
 
   useEffect(() => {
+    setRowsCleared(0);
+
+    const sweepRows = (newStage) =>
+      newStage.reduce((ack, row) => {
+        if (row.findIndex((cell) => cell[0] === 0) === -1) {
+          setRowsCleared((prev) => prev + 1);
+          ack.unshift(new Array(newStage[0].length).fill([0, "clear"]));
+          return ack;
+        }
+        ack.push(row);
+        return ack;
+      }, []);
+
     const updateStage = (prevStage) => {
       const newStage = clearStage(prevStage);
 
@@ -17,13 +31,17 @@ const useStage = (player, resetPlayer) => {
               `${player.isCollided ? "merged" : "clear"}`,
             ];
 
-      if (player.isCollided) resetPlayer();
+      if (player.isCollided) {
+        resetPlayer();
+        return sweepRows(newStage);
+      }
+
       return newStage;
     };
     setStage((prev) => updateStage(prev, player));
   }, [player, resetPlayer]);
 
-  return [stage, setStage];
+  return [stage, setStage, rowsCleared];
 };
 
 export default useStage;

@@ -6,7 +6,6 @@ let count = 0;
 function Stage({ stage }) {
   const height = stage.length;
   const width = stage[0].length;
-
   return (
     <StyledStage height={height} width={width}>
       {stage.map((items) =>
